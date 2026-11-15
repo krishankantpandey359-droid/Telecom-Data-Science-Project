@@ -1,0 +1,32 @@
+name: Notebook end-to-end checks
+on:
+  push:
+    branches: ["main", "audit/**"]
+  pull_request:
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install notebook dependencies
+        run: python -m pip install --upgrade pip pandas numpy matplotlib seaborn jupyter nbconvert nbformat
+      - name: Execute complete notebook
+        run: jupyter nbconvert --to notebook --execute "Telecom_Data_Science_Project_COMPLETE (1).ipynb" --output executed_telecom.ipynb --ExecutePreprocessor.timeout=600
+      - name: Verify every non-empty code cell and outputs
+        run: |
+          python - <<'PY'
+          import nbformat
+          from pathlib import Path
+          executed = next(Path('.').glob('executed_*.ipynb'))
+          nb = nbformat.read(executed, as_version=4)
+          cells = [c for c in nb.cells if c.cell_type == 'code' and c.source.strip()]
+          assert cells and all(c.execution_count is not None for c in cells)
+          errors = [(i,o.ename,o.evalue) for i,c in enumerate(nb.cells) if c.cell_type == 'code' for o in c.get('outputs',[]) if o.output_type == 'error']
+          assert not errors, errors
+          assert any(o.output_type in {'display_data','execute_result'} for c in cells for o in c.get('outputs',[])), 'No rendered outputs'
+          print(f'Executed {len(cells)} non-empty code cells without errors.')
+          PY
