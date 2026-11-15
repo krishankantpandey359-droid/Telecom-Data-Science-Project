@@ -46,7 +46,7 @@ The analysis covers connectivity, touch screen, display dimensions, camera speci
 
 The project includes analysis of:
 
-- Customer information
+- Mobile phone hardware and device specifications
 - Numerical variables
 - Categorical variables
 - Connectivity and device features
@@ -80,9 +80,9 @@ Through this project, I learned how to:
 
 ## 📝 Conclusion
 
-This project demonstrates a practical Data Science workflow using mobile phone specifications data. The analysis helps in understanding customer characteristics, service patterns, billing information and churn-related behaviour.
+This project demonstrates a practical Data Science workflow using mobile phone specifications data. The analysis explores device features and their relationships with phone prices. It does not analyse telecom customers, subscriptions, billing, or churn.
 
-The project can be extended with a larger, documented dataset and a clearly defined prediction objective.
+The project can be extended with a larger, documented mobile phone dataset and a clearly defined prediction objective, such as estimating price from device specifications.
 
 ## 👩‍💻 Project Author
 
