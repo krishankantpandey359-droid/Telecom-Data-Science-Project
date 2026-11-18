@@ -91,3 +91,17 @@ The project can be extended with a larger, documented mobile phone dataset and a
 MCA Data Science Student
 
 **Project:** Mobile Phone Specifications Data Analysis
+
+
+## Dataset integrity and automated checks
+
+The notebook embeds a 50-row, 17-column mobile-phone specifications dataset. The project is a product-specification EDA exercise, not a telecom customer churn analysis. The embedded CSV is tested directly from the notebook source for row count, required columns, unique product IDs, finite non-negative numeric values, and yes/no feature flags.
+
+Run the dataset checks locally:
+
+```bash
+python -m pip install pandas pytest
+python -m pytest -q
+```
+
+GitHub Actions runs these checks and executes every non-empty notebook code cell. The CI artifact contains the executed notebook.
