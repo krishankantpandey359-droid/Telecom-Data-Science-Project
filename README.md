@@ -8,12 +8,12 @@ This is a product-specification analysis. It does not contain telecom customer, 
 
 ## Dataset and limitations
 
-The supplied CSV contains 50 products and 17 columns. The original data source, sampling frame, currency and collection date are not documented. Treat all results as descriptive patterns in this sample, not as market-wide findings or causal effects.
+The supplied CSV contains 50 product records and 17 columns. The original publisher, sampling frame, currency/unit for Price, measurement units and collection date are not documented. The data therefore supports a reproducible analysis exercise, not claims about the current phone market. Treat all results as descriptive patterns in this sample, not as market-wide findings or causal effects.
 
 ## Reusable analysis
 
 `src/phone_data.py` provides:
-- CSV loading and strict schema/value validation.
+- CSV loading and strict schema/value validation, including unique product IDs, duplicate-column detection, finite numeric values, positive measurements/prices and yes/no feature flags.
 - Descriptive statistics including count, mean, median, standard deviation, quartiles and IQR.
 - Spearman rank associations between numeric specifications and listed price.
 - Quantile-based price-band summaries for RAM, internal memory, battery power and weight.
