@@ -34,6 +34,14 @@ def test_product_ids_are_unique_and_present():
     assert frame["PID"].is_unique
 
 
+def test_validation_rejects_ids_that_duplicate_after_trimming():
+    frame = load_data()
+    frame.loc[0, "PID"] = "  duplicate-id "
+    frame.loc[1, "PID"] = "duplicate-id"
+    with pytest.raises(ValueError, match="after trimming whitespace"):
+        validate_phone_data(frame)
+
+
 def test_binary_features_are_yes_no():
     frame = load_data()
     for column in ["Blue", "Wi_Fi", "Tch_Scr", "Ext_Mem"]:
