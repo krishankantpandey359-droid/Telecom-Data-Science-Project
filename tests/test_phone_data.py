@@ -122,7 +122,6 @@ def test_missing_file_raises(tmp_path):
 
 def test_price_correlations_skip_constant_predictors():
     frame = load_data()
-    frame["constant_spec"] = 1
     # Keep the project's strict schema by making an existing numeric feature constant.
     frame["Depth"] = 1
     correlations = price_rank_correlations(frame)
