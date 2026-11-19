@@ -157,4 +157,12 @@ def test_supplementary_india_dataset_matches_provenance_record():
     frame = pd.read_csv(SUPPLEMENTARY_DATA)
     assert frame.shape == (758, 29)
     assert {"brand", "model", "price_inr", "ram_gb", "storage_gb", "has_5g"} <= set(frame.columns)
-    assert frame["price_inr"].notna().all()
+    assert frame["brand"].notna().all()
+    assert frame["model"].notna().all()
+    assert frame["brand"].astype(str).str.strip().ne("").all()
+    assert frame["model"].astype(str).str.strip().ne("").all()
+    for column in ["price_inr", "ram_gb", "storage_gb"]:
+        values = pd.to_numeric(frame[column], errors="coerce")
+        assert values.notna().all()
+        assert values.gt(0).all()
+    assert frame["has_5g"].dropna().astype(str).str.lower().isin(["true", "false"]).all()
