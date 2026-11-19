@@ -149,3 +149,12 @@ def test_price_correlations_reject_constant_price():
     frame["Price"] = 100
     with pytest.raises(ValueError, match="Price must vary"):
         validate_phone_data(frame)
+
+SUPPLEMENTARY_DATA = ROOT / "data" / "raw" / "smartphones_india_cleaned.csv"
+
+
+def test_supplementary_india_dataset_matches_provenance_record():
+    frame = pd.read_csv(SUPPLEMENTARY_DATA)
+    assert frame.shape == (758, 29)
+    assert {"brand", "model", "price_inr", "ram_gb", "storage_gb", "has_5g"} <= set(frame.columns)
+    assert frame["price_inr"].notna().all()
