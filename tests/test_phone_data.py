@@ -10,12 +10,13 @@ sys.path.insert(0, str(ROOT))
 from src.phone_data import (
     EXPECTED_COLUMNS,
     load_phone_data,
+    price_band_summary,
     price_rank_correlations,
     summarize_phone_data,
     validate_phone_data,
 )
 
-DATA_PATH = Path(__file__).resolve().parents[1] / "Telecom Dataset.csv"
+DATA_PATH = ROOT / "Telecom Dataset.csv"
 
 
 def load_data():
@@ -72,6 +73,21 @@ def test_price_correlations_are_bounded_and_ranked():
     assert correlations.abs().is_monotonic_decreasing
 
 
+def test_price_band_summary_covers_all_products_and_orders_bands():
+    frame = load_data()
+    original = frame.copy(deep=True)
+    summary = price_band_summary(frame, bands=3)
+    assert summary["product_count"].sum() == len(frame)
+    assert summary["product_count"].gt(0).all()
+    assert summary["mean_listed_price"].is_monotonic_increasing
+    pd.testing.assert_frame_equal(frame, original)
+
+
+def test_price_band_summary_rejects_invalid_band_count():
+    with pytest.raises(ValueError, match="at least 2"):
+        price_band_summary(load_data(), bands=1)
+
+
 @pytest.mark.parametrize(
     ("column", "value", "message"),
     [
@@ -111,6 +127,7 @@ def test_analysis_does_not_mutate_input():
     original = frame.copy(deep=True)
     summarize_phone_data(frame)
     price_rank_correlations(frame)
+    price_band_summary(frame)
     pd.testing.assert_frame_equal(frame, original)
 
 
@@ -119,10 +136,8 @@ def test_missing_file_raises(tmp_path):
         load_phone_data(tmp_path / "missing.csv")
 
 
-
 def test_price_correlations_skip_constant_predictors():
     frame = load_data()
-    # Keep the project's strict schema by making an existing numeric feature constant.
     frame["Depth"] = 1
     correlations = price_rank_correlations(frame)
     assert "Depth" not in correlations.index
@@ -133,4 +148,4 @@ def test_price_correlations_reject_constant_price():
     frame = load_data()
     frame["Price"] = 100
     with pytest.raises(ValueError, match="Price must vary"):
-        price_rank_correlations(frame)
+        validate_phone_data(frame)
