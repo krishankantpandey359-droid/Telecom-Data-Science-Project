@@ -105,3 +105,22 @@ python -m pytest -q
 ```
 
 GitHub Actions runs these checks and executes every non-empty notebook code cell. The CI artifact contains the executed notebook.
+
+
+## Reusable analysis module
+
+`src/phone_data.py` adds a reproducible CSV-based analysis path alongside the notebook:
+
+- `load_phone_data(path)` loads the repository CSV and validates it.
+- `validate_phone_data(frame)` checks the exact schema, unique product IDs, yes/no feature flags, missing values and finite non-negative numeric specifications.
+- `summarize_phone_data(frame)` reports count, mean, median, standard deviation, quartiles and IQR.
+- `price_rank_correlations(frame)` ranks numeric specifications by Spearman association with the supplied listed-price field.
+
+Run the reusable checks from the repository root:
+
+```bash
+python -m pip install pandas numpy pytest
+python -m pytest -q
+```
+
+The CSV and notebook are educational samples of 50 products. The dataset source, sampling frame, price currency and collection date are not documented. Treat associations as descriptive only. The project does not contain customer, subscription, billing or churn records.
