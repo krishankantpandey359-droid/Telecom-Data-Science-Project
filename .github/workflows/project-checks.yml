@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install notebook dependencies
-        run: python -m pip install --upgrade pip pandas numpy matplotlib seaborn jupyter nbconvert nbformat
+        run: python -m pip install --upgrade pip pandas numpy scipy matplotlib seaborn jupyter nbconvert nbformat
       - name: Install and run dataset tests
         run: |
           python -m pip install pytest

@@ -1,107 +1,38 @@
 # Mobile Phone Specifications Data Analysis
 
-## 📌 Project Overview
+## Project overview
 
-This project explores a 50-record mobile phone specifications dataset using Python and exploratory data analysis.
+This project explores a 50-record mobile phone specifications dataset using Python and exploratory data analysis. It analyzes connectivity, touch screen, display dimensions, camera specifications, internal memory, battery power, RAM, weight and listed price.
 
-The analysis covers connectivity, touch screen, display dimensions, camera specifications, internal memory, battery power, RAM, weight and price.
+This is a product-specification analysis. It does not contain telecom customer, subscription, billing or churn records.
 
-## 🎯 Objectives
+## Dataset and limitations
 
-- Understand the mobile phone specifications dataset
-- Inspect rows, columns and data types
-- Check missing values and duplicate records
-- Perform data cleaning
-- Perform Exploratory Data Analysis (EDA)
-- Analyse numerical and categorical variables
-- Create meaningful data visualisations
-- Study relationships between numerical variables
-- Explore relationships between phone specifications and price
-- Generate useful data-driven insights
+The supplied CSV contains 50 products and 17 columns. The original data source, sampling frame, currency and collection date are not documented. Treat all results as descriptive patterns in this sample, not as market-wide findings or causal effects.
 
-## 🛠️ Technologies Used
+## Reusable analysis
 
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Jupyter Notebook
-- Google Colab
+`src/phone_data.py` provides:
+- CSV loading and strict schema/value validation.
+- Descriptive statistics including count, mean, median, standard deviation, quartiles and IQR.
+- Spearman rank associations between numeric specifications and listed price.
+- Quantile-based price-band summaries for RAM, internal memory, battery power and weight.
 
-## 🔍 Project Workflow
+The price bands are calculated from this sample's own price distribution. They are not externally defined budget, mid-range or premium market categories. Correlations and group summaries are descriptive, not causal.
 
-1. Data Loading
-2. Data Inspection
-3. Data Cleaning
-4. Descriptive Statistics
-5. Exploratory Data Analysis
-6. Data Visualisation
-7. Correlation Analysis
-8. Phone Specification Analysis
-9. Key Findings
-10. Conclusion
-
-## 📊 Analysis Performed
-
-The project includes analysis of:
-
-- Mobile phone hardware and device specifications
-- Numerical variables
-- Categorical variables
-- Connectivity and device features
-- Phone price and hardware specifications
-- Phone price patterns
-- Relationships between numerical variables
-
-## 📈 Visualisations
-
-The notebook contains different visualisations such as:
-
-- Histograms
-- Bar charts
-- Box plots
-- Count plots
-- Correlation heatmap
-- Phone specification comparisons
-
-## 💡 Key Learning Outcomes
-
-Through this project, I learned how to:
-
-- Work with a mobile phone dataset
-- Use Pandas for data analysis
-- Clean and prepare data
-- Perform Exploratory Data Analysis
-- Create data visualisations
-- Interpret statistical results
-- Explore relationships between phone features and price
-- Follow a structured Data Science workflow
-
-## 📝 Conclusion
-
-This project demonstrates a practical Data Science workflow using mobile phone specifications data. The analysis explores device features and their relationships with phone prices. It does not analyse telecom customers, subscriptions, billing, or churn.
-
-The project can be extended with a larger, documented mobile phone dataset and a clearly defined prediction objective, such as estimating price from device specifications.
-
-## 👩‍💻 Project Author
-
-**Srishti Pandey**
-
-MCA Data Science Student
-
-**Project:** Mobile Phone Specifications Data Analysis
-
-
-## Dataset integrity and automated checks
-
-The notebook embeds a 50-row, 17-column mobile-phone specifications dataset. The project is a product-specification EDA exercise, not a telecom customer churn analysis. The embedded CSV is tested directly from the notebook source for row count, required columns, unique product IDs, finite non-negative numeric values, and yes/no feature flags.
-
-Run the dataset checks locally:
+## Run locally
 
 ```bash
-python -m pip install pandas pytest
+python -m pip install pandas numpy scipy matplotlib seaborn jupyter nbconvert nbformat pytest
 python -m pytest -q
 ```
 
-GitHub Actions runs these checks and executes every non-empty notebook code cell. The CI artifact contains the executed notebook.
+GitHub Actions runs the data tests and executes non-empty notebook code cells.
+
+## Analysis scope
+
+The project analyzes phone product specifications and listed prices. It must not be described as customer churn prediction or telecom customer behavior analysis. A future prediction extension requires a documented larger dataset, a defined target, a leakage-safe train/test design and a baseline comparison.
+
+## Author
+
+Srishti Pandey, MCA Data Science
