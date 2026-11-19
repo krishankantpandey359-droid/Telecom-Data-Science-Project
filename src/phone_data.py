@@ -13,6 +13,7 @@ EXPECTED_COLUMNS = [
 ]
 BINARY_COLUMNS = ["Blue", "Wi_Fi", "Tch_Scr", "Ext_Mem"]
 NUMERIC_COLUMNS = [column for column in EXPECTED_COLUMNS if column not in {"PID", *BINARY_COLUMNS}]
+SPECIFICATION_COLUMNS = [column for column in NUMERIC_COLUMNS if column != "Price"]
 
 
 def validate_phone_data(frame: pd.DataFrame) -> pd.DataFrame:
@@ -44,6 +45,8 @@ def validate_phone_data(frame: pd.DataFrame) -> pd.DataFrame:
         raise ValueError("Numeric specifications contain non-finite values.")
     if (numeric < 0).any().any():
         raise ValueError("Numeric specifications must not be negative.")
+    if numeric["Price"].nunique(dropna=False) < 2:
+        raise ValueError("Price must vary for comparative price analysis.")
     return frame
 
 
@@ -73,9 +76,7 @@ def price_rank_correlations(frame: pd.DataFrame) -> pd.Series:
     """Rank numeric specifications by Spearman association with listed price."""
     validate_phone_data(frame)
     numeric = frame[NUMERIC_COLUMNS].apply(pd.to_numeric, errors="raise")
-    if numeric["Price"].nunique(dropna=False) < 2:
-        raise ValueError("Price must vary to calculate rank correlations.")
-    predictors = numeric.drop(columns="Price")
+    predictors = numeric[SPECIFICATION_COLUMNS]
     variable_predictors = predictors.columns[predictors.nunique(dropna=False) > 1]
     if len(variable_predictors) == 0:
         return pd.Series(dtype=float, name="spearman_rho_with_listed_price")
@@ -85,3 +86,34 @@ def price_rank_correlations(frame: pd.DataFrame) -> pd.Series:
     return correlations.sort_values(key=lambda values: values.abs(), ascending=False).rename(
         "spearman_rho_with_listed_price"
     ).round(3)
+
+
+def price_band_summary(frame: pd.DataFrame, bands: int = 3) -> pd.DataFrame:
+    """Summarize product specifications across quantile-based listed-price bands.
+
+    Bands are relative to this supplied sample, not market-defined price tiers.
+    Duplicate quantile boundaries are dropped for datasets with tied prices.
+    """
+    validate_phone_data(frame)
+    if not isinstance(bands, int) or bands < 2:
+        raise ValueError("bands must be an integer of at least 2.")
+    working = frame.copy()
+    working["Price"] = pd.to_numeric(working["Price"], errors="raise")
+    labels = [f"Sample price band {i + 1}" for i in range(bands)]
+    working["price_band"] = pd.qcut(
+        working["Price"], q=bands, labels=False, duplicates="drop"
+    )
+    actual_bands = int(working["price_band"].nunique())
+    working["price_band"] = working["price_band"].map(
+        {i: labels[i] for i in range(actual_bands)}
+    )
+    result = working.groupby("price_band", observed=True).agg(
+        product_count=("PID", "count"),
+        mean_listed_price=("Price", "mean"),
+        median_listed_price=("Price", "median"),
+        mean_ram=("RAM", "mean"),
+        mean_internal_memory=("Int_Mem", "mean"),
+        mean_battery_power=("Bty_Pwr", "mean"),
+        mean_weight=("Weight", "mean"),
+    )
+    return result.round(2)
