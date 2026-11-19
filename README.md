@@ -20,7 +20,7 @@ This is a small product-specification exercise. It contains no telecom subscribe
 - Dataset page: [Kaggle Smartphones Cleaned Dataset](https://www.kaggle.com/datasets/githubmasterin/smartphones-cleaned-dataset)
 - Upstream repository states CC0 1.0 Universal. See [dataset provenance](docs/DATASET_PROVENANCE.md).
 
-This separate dataset is the basis for `sql/smartphone_market_analysis.sql`. Import it into SQLite as a table named `smartphones` before running the queries. It contains brand, model, INR listed price, processor, RAM, storage, connectivity, display, battery and camera fields.
+This dataset powers `sql/smartphone_market_analysis.sql`. The automated test suite loads it into an in-memory SQLite database and executes every SELECT query in that SQL file. You can also import it into a local SQLite table named `smartphones` and run the SQL file manually.
 
 The upstream README describes 1,007 scraped listings reduced to 758 cleaned records. It labels the data India / 2025, but does not give an exact collection date. Prices are a historical scrape snapshot, not live prices.
 
@@ -41,7 +41,7 @@ python -m pip install pandas numpy scipy matplotlib seaborn jupyter nbconvert nb
 python -m pytest -q
 ```
 
-GitHub Actions runs the dataset tests and executes non-empty notebook code cells. The supplementary SQL queries are provided as a separate analysis track and require a SQLite import step.
+GitHub Actions runs the Track 1 dataset tests, validates all 758 rows in Track 2, executes the supplementary SQL queries against SQLite, and executes the non-empty notebook code cells.
 
 ## Data limitations
 
