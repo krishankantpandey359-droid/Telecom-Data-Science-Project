@@ -96,7 +96,9 @@ def test_price_band_summary_rejects_invalid_band_count():
         ("Blue", "unknown", "yes/no"),
         ("Price", "unknown", "non-numeric"),
         ("Price", float("inf"), "non-finite"),
-        ("RAM", -1, "must not be negative"),
+        ("RAM", -1, "must be positive"),
+        ("Price", 0, "must be positive"),
+        ("Px_h", 0, "must be positive"),
     ],
 )
 def test_validation_rejects_invalid_values(column, value, message):
@@ -149,3 +151,17 @@ def test_price_correlations_reject_constant_price():
     frame["Price"] = 100
     with pytest.raises(ValueError, match="Price must vary"):
         validate_phone_data(frame)
+
+
+
+def test_validation_rejects_duplicate_column_names():
+    frame = load_data()
+    frame.columns = list(frame.columns[:-1]) + ["RAM"]
+    with pytest.raises(ValueError, match="duplicate column names"):
+        validate_phone_data(frame)
+
+
+def test_binary_values_are_case_and_whitespace_tolerant():
+    frame = load_data()
+    frame.loc[0, "Blue"] = " YES "
+    assert validate_phone_data(frame) is frame
