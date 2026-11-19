@@ -117,3 +117,21 @@ def test_analysis_does_not_mutate_input():
 def test_missing_file_raises(tmp_path):
     with pytest.raises(FileNotFoundError):
         load_phone_data(tmp_path / "missing.csv")
+
+
+
+def test_price_correlations_skip_constant_predictors():
+    frame = load_data()
+    frame["constant_spec"] = 1
+    # Keep the project's strict schema by making an existing numeric feature constant.
+    frame["Depth"] = 1
+    correlations = price_rank_correlations(frame)
+    assert "Depth" not in correlations.index
+    assert correlations.notna().all()
+
+
+def test_price_correlations_reject_constant_price():
+    frame = load_data()
+    frame["Price"] = 100
+    with pytest.raises(ValueError, match="Price must vary"):
+        price_rank_correlations(frame)
