@@ -34,3 +34,10 @@ jobs:
           assert any(o.output_type in {'display_data','execute_result'} for c in cells for o in c.get('outputs',[])), 'No rendered outputs'
           print(f'Executed {len(cells)} non-empty code cells without errors.')
           PY
+      - name: Preserve executed notebook as a build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: telecom-executed-notebook
+          path: executed_telecom.ipynb
+          if-no-files-found: error
+          retention-days: 14
