@@ -27,8 +27,9 @@ def validate_phone_data(frame: pd.DataFrame) -> pd.DataFrame:
         raise ValueError("Phone dataset contains missing values.")
     if frame["PID"].astype(str).str.strip().eq("").any():
         raise ValueError("Product IDs must not be blank.")
-    if frame["PID"].duplicated().any():
-        raise ValueError("Product IDs must be unique.")
+    normalized_ids = frame["PID"].astype(str).str.strip()
+    if normalized_ids.duplicated().any():
+        raise ValueError("Product IDs must be unique after trimming whitespace.")
 
     for column in BINARY_COLUMNS:
         values = set(frame[column].astype(str).str.strip().str.lower())
