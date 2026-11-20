@@ -22,6 +22,8 @@ def validate_phone_data(frame: pd.DataFrame) -> pd.DataFrame:
         raise TypeError("Expected a pandas DataFrame.")
     if frame.empty:
         raise ValueError("Phone dataset is empty.")
+    if frame.columns.has_duplicates:
+        raise ValueError("Phone dataset contains duplicate column names.")
     if frame.columns.tolist() != EXPECTED_COLUMNS:
         raise ValueError(f"Expected columns in this order: {EXPECTED_COLUMNS}")
     if frame.isna().any().any():
@@ -43,8 +45,11 @@ def validate_phone_data(frame: pd.DataFrame) -> pd.DataFrame:
     values = numeric.to_numpy(dtype=float)
     if not np.isfinite(values).all():
         raise ValueError("Numeric specifications contain non-finite values.")
-    if (numeric < 0).any().any():
-        raise ValueError("Numeric specifications must not be negative.")
+    if (numeric <= 0).any().any():
+        non_positive = numeric.columns[(numeric <= 0).any()].tolist()
+        raise ValueError(
+            f"Numeric specifications and listed price must be positive: {non_positive}"
+        )
     if numeric["Price"].nunique(dropna=False) < 2:
         raise ValueError("Price must vary for comparative price analysis.")
     return frame
