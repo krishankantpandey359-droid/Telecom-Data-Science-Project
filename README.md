@@ -27,7 +27,7 @@ The upstream README describes 1,007 scraped listings reduced to 758 cleaned reco
 ## Reusable Python analysis
 
 `src/phone_data.py` works with Track 1's 50 × 17 dataset. It provides:
-- Strict schema and value validation.
+- Strict schema and value validation, including unique product IDs, duplicate-column detection, finite numeric values, positive specifications/listed prices and yes/no feature flags.
 - Descriptive statistics: count, mean, median, standard deviation, quartiles and IQR.
 - Spearman rank associations between numeric specifications and listed price.
 - Quantile-based summaries of sample price bands.
