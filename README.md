@@ -37,7 +37,7 @@ These bands are calculated from the 50-row sample. They are not market-defined b
 ## Run locally
 
 ```bash
-python -m pip install pandas numpy scipy matplotlib seaborn jupyter nbconvert nbformat pytest
+python -m pip install -r requirements.txt
 python -m pytest -q
 ```
 
