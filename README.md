@@ -55,3 +55,7 @@ GitHub Actions runs the Track 1 dataset tests, validates all 758 rows in Track 2
 ## Author
 
 Srishti Pandey, MCA Data Science
+
+## Latest GitHub Actions validation
+
+Latest verified successful main-branch workflow run checked on 24 November 2026: [GitHub Actions run #45312163979](https://github.com/krishankantpandey359-droid/Telecom-Data-Science-Project/actions/runs/45312163979). This run verifies the checks configured in this repository's workflow; it does not replace manual testing of features outside CI.
