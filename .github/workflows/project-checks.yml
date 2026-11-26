@@ -3,6 +3,9 @@ on:
   push:
     branches: ["main", "audit/**"]
   pull_request:
+permissions:
+  contents: read
+
 jobs:
   execute:
     runs-on: ubuntu-latest
