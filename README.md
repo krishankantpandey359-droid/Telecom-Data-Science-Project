@@ -58,4 +58,4 @@ Srishti Pandey, MCA Data Science
 
 ## Latest GitHub Actions validation
 
-Latest verified successful main-branch workflow run checked on 26 November 2026: [GitHub Actions run #45797914410](https://github.com/krishankantpandey359-droid/Telecom-Data-Science-Project/actions/runs/45797914410). This run verifies the checks configured in this repository's workflow; it does not replace manual testing of features outside CI.
+Latest successful main-branch workflow run verified on 26 November 2026: [GitHub Actions run #45801779316](https://github.com/krishankantpandey359-droid/Telecom-Data-Science-Project/actions/runs/45801779316). This confirms the configured automated checks, not every manual or deployment feature.
